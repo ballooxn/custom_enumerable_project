@@ -1,43 +1,45 @@
 module Enumerable
   # Your code goes here
   def my_each_with_index
-    length.times do |i|
-      yield(self[i], i)
+    i = 0
+    my_each do |v|
+      yield(v, i)
+      i += 1
     end
     self
   end
 
   def my_select
-    new_array = []
+    arr = []
     my_each do |v|
-      new_array << v if yield(v) == true
+      arr << v if yield(v)
     end
-    new_array
+    arr
   end
 
   def my_any?
     my_each do |v|
-      return true if yield v
+      return true if yield(v) == true
     end
     false
   end
 
   def my_all?
     my_each do |v|
-      return false unless yield v
+      return false unless yield(v)
     end
     true
   end
 
   def my_none?
     my_each do |v|
-      return false if yield v
+      return false if yield(v)
     end
     true
   end
 
   def my_count
-    return size unless block_given?
+    return length unless block_given?
 
     count = 0
     my_each do |v|
@@ -47,18 +49,16 @@ module Enumerable
   end
 
   def my_map
-    new_array = []
-    my_each do |v|
-      new_array << yield(v)
+    my_each_with_index do |v, i|
+      self[i] = yield(v)
     end
-    new_array
   end
 
-  def my_inject(total)
+  def my_inject(initial_value)
     my_each do |v|
-      total = yield(total, v)
+      initial_value = yield(initial_value, v)
     end
-    total
+    initial_value
   end
 end
 

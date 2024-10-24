@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../lib/my_enumerables"
 
 RSpec.describe Array do
@@ -16,12 +18,14 @@ RSpec.describe Array do
 
       it "executes the block for each element" do
         my_each_results = []
+        each_results = []
+
         array.my_each do |element|
-          my_each_results << (element * 2)
+          my_each_results << element * 2 # rubocop:disable Lint/AmbiguousOperatorPrecedence
         end
 
-        each_results = array.map do |element|
-          (element * 2)
+        array.each do |element| # rubocop:disable Style/MapIntoArray
+          each_results << element * 2 # rubocop:disable Lint/AmbiguousOperatorPrecedence
         end
 
         expect(my_each_results).to eq(each_results)
